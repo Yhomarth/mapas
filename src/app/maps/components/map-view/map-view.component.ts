@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Map } from 'mapbox-gl';
 import { PlacesService } from '../../services';
 
 @Component({
@@ -6,12 +7,26 @@ import { PlacesService } from '../../services';
   templateUrl: './map-view.component.html',
   styleUrls: ['./map-view.component.css']
 })
-export class MapViewComponent implements OnInit {
+export class MapViewComponent implements AfterViewInit {
+
+
+  @ViewChild('mapDiv') 
+  mapDiv !: ElementRef;
 
   constructor(private placeService: PlacesService) { }
 
-  ngOnInit(): void {
-    console.log(this.placeService.userLocation);
+  ngAfterViewInit(): void {
+
+    if(!this.placeService.userLocation)
+        throw new Error('No hay placeService.userLocation');
+
+    const map = new Map({
+      container: this.mapDiv.nativeElement, // container ID
+      style: 'mapbox://styles/mapbox/streets-v11', // style URL
+      center: this.placeService.userLocation, // starting position [lng, lat]
+      zoom: 14, // starting zoom
+      });
+    
   }
 
 }
