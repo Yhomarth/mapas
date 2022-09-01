@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlacesService } from '../../services';
 
 @Component({
   selector: 'app-search-bar',
@@ -11,7 +12,7 @@ export class SearchBarComponent  {
   private debounceTimer ?: NodeJS.Timer;
   private busqueda : string = '';
 
-  constructor() { }
+  constructor(private placeServices: PlacesService) { }
 
 
   
@@ -24,6 +25,7 @@ export class SearchBarComponent  {
         if((txtQuery.length > 2) && this.busqueda !== txtQuery) {
 
             console.log('LLamar esto : ', txtQuery);
+            this.placeServices.getPlaceByQuery( txtQuery );
             
             this.busqueda = txtQuery;
         }
