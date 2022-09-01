@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Injectable } from '@angular/core';
+import { PlacesApiClient } from '../api';
+
 import { Feature, PlacesResponse } from '../interfaces/places';
 
 @Injectable({
@@ -15,7 +17,7 @@ export class PlacesService {
     return !!this.userLocation;
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private placesApi: PlacesApiClient) {
     this.getUserLocation();
    }
 
@@ -41,13 +43,17 @@ export class PlacesService {
 
   getPlaceByQuery(query: string = ''){
 
+    if(!this.userLocation) throw Error('No hay user Location');
+
     // TODO: evaluar estring vacio
     this.isLoadingPlaces = true;
 
-    this.http.get<PlacesResponse>(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?country=do&proximity=-69.90428181730165%2C18.468428500220156&types=place%2Cpostcode%2Caddress&language=es&access_token=pk.eyJ1IjoieWhvbWFydGgiLCJhIjoiY2s5eWk1cGQ0MDBzZjNmbmFleDEycDZybSJ9.vPaqzzTbVnMc5yxhxgOfng`)
+    this.placesApi.get<PlacesResponse>(`/${query}.json`, {
+      params : {
+        proximity : this.userLocation.join(',')
+      }
+    })
       .subscribe( resp => {
-
-
         this.places = resp.features;
         this.isLoadingPlaces = false;
       } );
