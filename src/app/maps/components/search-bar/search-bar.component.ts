@@ -20,11 +20,14 @@ export class SearchBarComponent  {
     
     if( this.debounceTimer ) clearTimeout( this.debounceTimer );
 
+   
+
     this.debounceTimer = setTimeout( () => {
 
-        if((txtQuery.length > 2) && this.busqueda !== txtQuery) {
+          
 
-            console.log('LLamar esto : ', txtQuery);
+        if(this.busqueda !== txtQuery) {
+
             this.placeServices.getPlaceByQuery( txtQuery );
             
             this.busqueda = txtQuery;

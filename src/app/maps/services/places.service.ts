@@ -21,6 +21,11 @@ export class PlacesService {
     this.getUserLocation();
    }
 
+   private cargarDefecto() {
+    this.places = [];
+    this.isLoadingPlaces = false;
+   }
+
   public async getUserLocation(): Promise<[number, number]>{
 
     return new Promise( (resolve, reject)=> {
@@ -42,11 +47,18 @@ export class PlacesService {
 
 
   getPlaceByQuery(query: string = ''){
+    // TODO: evaluar estring vacio
+    if(query.length === 0) {
+      this.cargarDefecto();
+      return; 
+    }
+
+
+
+    this.isLoadingPlaces = true;
+
 
     if(!this.userLocation) throw Error('No hay user Location');
-
-    // TODO: evaluar estring vacio
-    this.isLoadingPlaces = true;
 
     this.placesApi.get<PlacesResponse>(`/${query}.json`, {
       params : {
