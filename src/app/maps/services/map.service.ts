@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LngLatBounds, LngLatLike, Map, Marker, Popup } from 'mapbox-gl';
+import { AnySourceData, LngLatBounds, LngLatLike, Map, Marker, Popup } from 'mapbox-gl';
 import { DirectionApiClient } from '../api';
 import { Feature } from '../interfaces/places';
 import { DirectionsResponse, Route } from '../interfaces/directions';
@@ -108,7 +108,44 @@ export class MapService {
       padding: 200
     });
 
+    const sourceData : AnySourceData = {
+      type : 'geojson',
+      data : {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type : 'Feature',
+            properties : {},
+            geometry : {
+              type : 'LineString',
+              coordinates: coords
+            }
+          }
+        ]
+      }
+    }
 
+    // TODO: limpiar ruta previa
+    if(this.map.getLayer('RouteString')){
+      this.map.removeLayer('RouteString');
+      this.map.removeSource('RouteString');
+    }
+
+    this.map.addSource('RouteString', sourceData);
+
+    this.map.addLayer({
+      id : 'RouteString',
+      type : 'line',
+      source: 'RouteString',
+      layout : {
+        'line-cap' : 'round',
+        'line-join' : 'round'
+      },
+      paint : {
+        'line-color' : 'black',
+        'line-width' : 3
+      }
+    })
 
   }
 
