@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHandler, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DirectionApiClient extends HttpClient {
 
-    public baseUrl : string = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/';
+    public baseUrl : string = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic';
 
     constructor(handler : HttpHandler) {
         super(handler);
