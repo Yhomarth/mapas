@@ -77,4 +77,9 @@ export class PlacesService {
   }
 
 
+  deletePlace() {
+    this.places = [];
+  }
+
+
 }
